@@ -1,0 +1,89 @@
+identity:
+  agent_name:
+    value:
+    status: UNRESOLVED
+    source:
+
+  purpose:
+    value:
+    status: UNRESOLVED
+    source:
+
+  primary_users:
+    value: []
+    status: UNRESOLVED
+    source:
+
+  agent_category:
+    value:
+    status: UNRESOLVED
+    source:
+
+scope:
+  primary_responsibilities: []
+  optional_responsibilities: []
+  out_of_scope: []
+  requires_approval: []
+  delegated_to_other_agents: []
+
+environment:
+  project_type:
+    value:
+    status: UNRESOLVED
+    source:
+
+  target_resource:
+    value:
+    status: UNRESOLVED
+    source:
+
+  languages: []
+  frameworks: []
+  libraries: []
+  runtime:
+  build_tools: []
+  test_tools: []
+  deployment_environment:
+
+rules:
+  user_rules: []
+  task_rules: []
+  project_rules: []
+  organization_rules: []
+  agent_defaults: []
+  skill_defaults: []
+
+inputs:
+  primary_input:
+  optional_inputs: []
+  required_context: []
+
+outputs:
+  primary_output:
+  output_format: markdown
+  files_to_create: []
+  completion_report: true
+
+tools:
+  available: []
+  restricted: []
+  unavailable: []
+
+permissions:
+  allowed: []
+  approval_required: []
+  prohibited: []
+
+autonomy:
+  level: medium
+  allowed_assumptions: []
+  question_conditions: []
+
+validation:
+  success_criteria: []
+  required_tests: []
+  quality_checks: []
+  failure_conditions: []
+
+assumptions: []
+unresolved: []

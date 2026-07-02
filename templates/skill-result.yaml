@@ -1,0 +1,29 @@
+status: SUCCESS
+
+result:
+  summary:
+  data:
+
+completed: []
+
+not_completed: []
+
+limitations: []
+
+assumptions: []
+
+unresolved: []
+
+reason:
+  type:
+  description:
+
+affected_outputs: []
+
+suggested_question:
+
+requested_action:
+  type:
+  target:
+  reason:
+  alternatives: []
