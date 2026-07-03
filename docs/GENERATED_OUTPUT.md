@@ -1,5 +1,33 @@
 # 생성 결과 구조
 
+## Project Bootstrap Mode 공통 산출물
+
+```text
+target-project/
+├── .agent/
+│   ├── PROJECT.md
+│   ├── ARCHITECTURE.md
+│   ├── RULES.md
+│   └── WORKFLOW.md
+└── .agent-builder/
+    └── <project-name>/
+        ├── setup-plan.md
+        ├── readiness-report.md
+        └── agent-scenarios.md
+```
+
+`.agent/`는 여러 에이전트 런타임이 함께 읽는 프로젝트 지식입니다. `.agent-builder/`는 생성 과정의 계획, 검증과 미확정 사항을 기록합니다.
+
+명시 경로:
+
+- `.agent/PROJECT.md`
+- `.agent/ARCHITECTURE.md`
+- `.agent/RULES.md`
+- `.agent/WORKFLOW.md`
+- `.agent-builder/<project-name>/setup-plan.md`
+- `.agent-builder/<project-name>/readiness-report.md`
+- `.agent-builder/<project-name>/agent-scenarios.md`
+
 ## Claude Code 단일 대상
 
 ```text
@@ -62,6 +90,7 @@ target-project/
 - 목적
 - 책임
 - 범위 밖 업무
+- 프로젝트 지식
 - 성공 기준
 - 프로젝트 규약
 - 질문 정책

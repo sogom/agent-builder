@@ -12,8 +12,13 @@ REQUIRED = [
     "references/skill-decomposition.md",
     "references/rule-resolution.md",
     "references/permission-policy.md",
+    "references/project-bootstrap-policy.md",
     "references/validation-policy.md",
     "templates/agent-spec-template.md",
+    "templates/project-profile.md",
+    "templates/project-rules.md",
+    "templates/project-setup-plan.md",
+    "templates/project-readiness-report.md",
     "templates/skill-spec-template.md",
     "templates/platforms/claude-agent.md",
     "templates/platforms/factory-droid.md",
@@ -45,6 +50,14 @@ if skill.is_file():
         ".factory/droids/",
         "Completion Gate",
         "Completion Conditions",
+        "Project Bootstrap Mode",
+        "Operating Modes",
+        ".agent/PROJECT.md",
+        ".agent/ARCHITECTURE.md",
+        ".agent/RULES.md",
+        ".agent/WORKFLOW.md",
+        ".agent-builder/<project-name>/setup-plan.md",
+        "references/project-bootstrap-policy.md",
         ".agent-builder/<agent-name>/agent-scenarios.md",
         "파일을 생성할 수 없는 환경",
     ]:
@@ -56,6 +69,8 @@ if skill.is_file():
         "대상 플랫폼의 실제 에이전트 파일이 생성되어 있다",
         "필요한 모든 하위 스킬 파일이 생성되어 있다",
         ".agent-builder/<agent-name>/agent-scenarios.md",
+        ".agent-builder/<project-name>/setup-plan.md",
+        "readiness-report.md",
         "경로별 완성본",
     ]:
         if phrase not in completion_conditions:
@@ -68,6 +83,15 @@ if generated_output.is_file():
         errors.append("docs/GENERATED_OUTPUT.md should not write generated scenarios into target tests/.")
     if ".agent-builder/" not in content:
         errors.append("docs/GENERATED_OUTPUT.md must document the generated scenario namespace.")
+    for phrase in [
+        ".agent/PROJECT.md",
+        ".agent/ARCHITECTURE.md",
+        ".agent/RULES.md",
+        ".agent/WORKFLOW.md",
+        "readiness-report.md",
+    ]:
+        if phrase not in content:
+            errors.append(f"docs/GENERATED_OUTPUT.md is missing project bootstrap output: {phrase}")
 
 template_heading_checks = {
     "templates/agent-spec-template.md": [
@@ -79,6 +103,26 @@ template_heading_checks = {
         r"(?m)^##\s+Purpose\s*$",
         r"(?m)^##\s+Tools\s*$",
         r"(?m)^##\s+Validation Scenarios\s*$",
+    ],
+    "templates/project-profile.md": [
+        r"(?m)^##\s+Purpose\s*$",
+        r"(?m)^##\s+Technology Stack\s*$",
+        r"(?m)^##\s+Unresolved Decisions\s*$",
+    ],
+    "templates/project-rules.md": [
+        r"(?m)^##\s+Rule Priority\s*$",
+        r"(?m)^##\s+Approval Required\s*$",
+        r"(?m)^##\s+Prohibited By Default\s*$",
+    ],
+    "templates/project-setup-plan.md": [
+        r"(?m)^##\s+Files To Create\s*$",
+        r"(?m)^##\s+Agents To Create\s*$",
+        r"(?m)^##\s+Validation Plan\s*$",
+    ],
+    "templates/project-readiness-report.md": [
+        r"(?m)^##\s+Status\s*$",
+        r"(?m)^##\s+Generated Project Knowledge\s*$",
+        r"(?m)^##\s+Approval-Required Follow-Up\s*$",
     ],
 }
 
@@ -106,6 +150,19 @@ for relative in [
         ]:
             if phrase not in content:
                 errors.append(f"{relative} is missing required content: {phrase}")
+
+bootstrap_policy = ROOT / "references/project-bootstrap-policy.md"
+if bootstrap_policy.is_file():
+    content = bootstrap_policy.read_text(encoding="utf-8")
+    for phrase in [
+        "Allowed by default",
+        "Approval required",
+        "Prohibited by default",
+        ".agent/PROJECT.md",
+        ".agent-builder/<project-name>/readiness-report.md",
+    ]:
+        if phrase not in content:
+            errors.append(f"references/project-bootstrap-policy.md is missing required content: {phrase}")
 
 if errors:
     print("Validation failed:")

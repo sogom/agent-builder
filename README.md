@@ -1,9 +1,12 @@
 # Agent Builder
 
-`Agent Builder`는 현재 프로젝트의 코드, 규약, 기술 스택과 사용 목적을 분석해 **실제로 사용할 프로젝트 전용 에이전트**를 생성하는 메타 스킬입니다.
+Build AI-ready projects with reusable Agents and Skills.
+
+`Agent Builder`는 프로젝트의 목적, 규약, 기술 스택과 사용 맥락을 분석해 **AI가 일관되게 작업할 수 있는 프로젝트 지식, 하위 스킬, 프로젝트 전용 에이전트**를 생성하는 메타 스킬입니다.
 
 생성 결과는 단순 설계 문서가 아니라 다음과 같은 플랫폼용 파일입니다.
 
+- 공통 프로젝트 지식: `.agent/PROJECT.md`, `.agent/ARCHITECTURE.md`, `.agent/RULES.md`
 - Claude Code: `.claude/agents/<agent-name>.md`
 - Factory Droid: `.factory/droids/<agent-name>.md`
 - 에이전트가 사용할 하위 스킬: 각 플랫폼의 `skills/<skill-name>/SKILL.md`
@@ -13,6 +16,8 @@
 - Claude Code project skills and subagents
 - Factory Droid workspace skills and Custom Droids
 - 두 플랫폼 동시 생성
+- 새 프로젝트를 AI-ready workspace로 초기화하는 Project Bootstrap Mode
+- 기존 프로젝트 분석 기반 AI workspace 생성은 향후 v3 범위
 
 ## 저장소 구성
 
@@ -139,15 +144,31 @@ Factory Droid에서 예상 결과:
         └── SKILL.md
 ```
 
+Project Bootstrap Mode에서 예상 결과:
+
+```text
+.agent/
+├── PROJECT.md
+├── ARCHITECTURE.md
+├── RULES.md
+└── WORKFLOW.md
+.agent-builder/
+└── company-system/
+    ├── setup-plan.md
+    ├── readiness-report.md
+    └── agent-scenarios.md
+```
+
 ## 동작 원칙
 
 1. 현재 요청과 대화에서 이미 알려진 정보를 먼저 사용합니다.
 2. 프로젝트 규약과 기술 스택을 파일에서 탐색합니다.
-3. 구조, 권한, 안전에 큰 영향을 주는 정보만 질문합니다.
-4. 에이전트가 최종 목표를 책임하고 하위 스킬은 반복 가능한 전문 절차를 담당합니다.
-5. 최소 권한 원칙을 적용합니다.
-6. 실제 플랫폼용 에이전트 파일과 하위 스킬 파일을 생성합니다.
-7. 테스트 시나리오를 작성하고 결과를 검증합니다.
+3. 새 프로젝트라면 목적, 스택, 아키텍처, 운영 제약을 정리해 AI-ready 프로젝트 문서를 생성합니다.
+4. 구조, 권한, 안전에 큰 영향을 주는 정보만 질문합니다.
+5. 에이전트가 최종 목표를 책임하고 하위 스킬은 반복 가능한 전문 절차를 담당합니다.
+6. 최소 권한 원칙을 적용합니다.
+7. 실제 플랫폼용 에이전트 파일과 하위 스킬 파일을 생성합니다.
+8. 테스트 시나리오를 작성하고 결과를 검증합니다.
 
 ## 저장소 게시
 

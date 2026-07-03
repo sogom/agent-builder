@@ -12,6 +12,7 @@ examples/frontend-expert-agent.md
 examples/platforms/claude-code/frontend-expert.md
 examples/platforms/factory-droid/frontend-expert.md
 references/permission-policy.md
+references/project-bootstrap-policy.md
 references/question-policy.md
 references/rule-resolution.md
 references/skill-decomposition.md
@@ -23,6 +24,10 @@ templates/agent-spec-template.md
 templates/completion-report.md
 templates/platforms/claude-agent.md
 templates/platforms/factory-droid.md
+templates/project-profile.md
+templates/project-readiness-report.md
+templates/project-rules.md
+templates/project-setup-plan.md
 templates/requirement-model.yaml
 templates/skill-result.yaml
 templates/skill-spec-template.md

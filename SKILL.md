@@ -1,6 +1,6 @@
 ---
 name: agent-builder
-description: 프로젝트의 코드, 규약과 사용 목적을 분석하여 Claude Code 또는 Factory Droid에서 실제 사용할 프로젝트 전용 에이전트와 하위 스킬 파일을 생성한다. 에이전트 제작, 전문 에이전트 구성, 서브에이전트 또는 Custom Droid 생성 요청에 사용한다.
+description: 프로젝트의 목적, 코드, 규약과 사용 맥락을 분석하여 AI-ready 프로젝트 문서, 재사용 가능한 하위 스킬, Claude Code 또는 Factory Droid용 프로젝트 전용 에이전트를 생성한다. 에이전트 제작, 전문 에이전트 구성, 서브에이전트, Custom Droid 생성, 새 프로젝트 AI 작업 환경 초기화, 프로젝트 규칙/스킬/에이전트 세팅 요청에 사용한다.
 user-invocable: true
 disable-model-invocation: false
 ---
@@ -9,7 +9,9 @@ disable-model-invocation: false
 
 ## Purpose
 
-사용자가 만들고자 하는 에이전트의 목적과 업무를 분석하여 실행 가능한 에이전트 명세, 하위 스킬 구조, 규약 적용 방식, 도구와 권한 정책 및 검증 시나리오를 설계한다.
+사용자가 만들고자 하는 에이전트의 목적과 업무를 분석하여 실행 가능한 에이전트 명세, 하위 스킬 구조, 프로젝트 규약, 도구와 권한 정책 및 검증 시나리오를 설계한다.
+
+새 프로젝트나 AI 작업 환경 초기화 요청에서는 프로젝트 목적, 아키텍처, 규칙과 워크플로를 먼저 정리한 뒤 그 위에서 동작할 하위 스킬과 에이전트를 생성한다.
 
 이 스킬은 생성 대상 에이전트의 실제 업무를 대신 수행하지 않는다.
 
@@ -32,6 +34,7 @@ disable-model-invocation: false
 - 각 스킬의 입력과 출력
 - 스킬 간 의존성
 - 프로젝트 규약 적용 방식
+- 프로젝트 목적, 아키텍처, 규칙과 워크플로 문서
 - 도구와 권한 명세
 - 사용자 질문 정책
 - 실패 및 예외 처리 정책
@@ -61,6 +64,48 @@ disable-model-invocation: false
 7. 사용자 질문
 
 모든 입력 항목을 사용자에게 양식으로 채우게 하지 않는다.
+
+---
+
+## Operating Modes
+
+요청의 목적에 따라 다음 모드 중 하나를 선택한다.
+
+### Agent-Only Mode
+
+기존 프로젝트 또는 이미 알려진 프로젝트 맥락 위에 전문 에이전트와 하위 스킬만 생성한다.
+
+사용 예:
+
+```text
+이 프로젝트의 코드 리뷰 에이전트를 만들어줘.
+프론트엔드 구현 에이전트와 UI 스킬을 만들어줘.
+```
+
+### Project Bootstrap Mode
+
+새 프로젝트 또는 아직 AI 작업 규칙이 없는 프로젝트를 AI-ready workspace로 초기화하고, 공통 프로젝트 지식과 필요한 에이전트/스킬을 함께 생성한다.
+
+사용 예:
+
+```text
+Go Fiber, Next.js, PostgreSQL 프로젝트를 시작할 건데 AI가 일할 수 있게 세팅해줘.
+새 회사 시스템 프로젝트의 규칙, 스킬, 에이전트까지 만들어줘.
+```
+
+이 모드는 `references/project-bootstrap-policy.md`를 따른다.
+
+### Existing Project Analysis Mode
+
+기존 프로젝트를 분석해 `.agent/` 문서, 규칙, 스킬과 에이전트를 생성한다. 이 모드는 기본적으로 v3 범위로 취급하되, 현재 접근 가능한 파일을 읽어 안전하게 생성할 수 있는 문서와 에이전트는 만든다.
+
+사용 예:
+
+```text
+이 레거시 Go 프로젝트를 분석해서 AI 작업 환경으로 정리해줘.
+```
+
+코드 수정, 패키지 설치, 설정 변경, 대규모 재구성은 별도 승인 대상으로 둔다.
 
 ---
 
@@ -110,6 +155,7 @@ outputs:
   primary_output:
   output_format:
   files_to_create:
+  project_documents:
   completion_report:
 
 tools:
@@ -536,6 +582,73 @@ rule:
 
 ---
 
+## Project Bootstrap Mode
+
+새 프로젝트를 AI-ready workspace로 초기화할 때는 코드 생성을 먼저 하지 않는다. 프로젝트 목적, 작업 방식, 규칙, 권한 경계와 에이전트 구성을 먼저 고정한다.
+
+### Bootstrap Outputs
+
+기본 생성물:
+
+```text
+.agent/
+├── PROJECT.md
+├── ARCHITECTURE.md
+├── RULES.md
+└── WORKFLOW.md
+.agent-builder/
+└── <project-name>/
+    ├── setup-plan.md
+    ├── readiness-report.md
+    └── agent-scenarios.md
+```
+
+플랫폼 대상이 있으면 기존 Agent-Only Mode 산출물도 함께 생성한다.
+
+```text
+.claude/agents/<agent-name>.md
+.claude/skills/<skill-name>/SKILL.md
+.factory/droids/<agent-name>.md
+.factory/skills/<skill-name>/SKILL.md
+```
+
+### Bootstrap Procedure
+
+1. 프로젝트 목적, 사용자, 도메인, 주요 워크플로를 추출한다.
+2. 기술 스택, 런타임, 데이터 저장소, 배포 환경과 제약을 확인한다.
+3. 불명확하지만 낮은 영향도의 항목은 안전한 기본값으로 둔다.
+4. 아키텍처, 코드 규칙, 테스트 기준, 보안 기준과 승인 정책을 문서화한다.
+5. 프로젝트 업무를 담당할 에이전트 후보와 하위 스킬 후보를 분해한다.
+6. `.agent/` 공통 문서와 플랫폼별 에이전트/스킬 파일을 생성한다.
+7. `.agent-builder/<project-name>/setup-plan.md`와 `readiness-report.md`에 가정, 미확정 사항, 승인 필요 작업을 기록한다.
+8. 검증 시나리오를 생성하고 완료 조건을 확인한다.
+
+### Bootstrap Boundaries
+
+기본 허용:
+
+- `.agent/` 프로젝트 지식 문서 생성
+- `.agent-builder/` 계획, 리포트와 검증 시나리오 생성
+- 플랫폼별 에이전트와 스킬 파일 생성
+- 템플릿 수준의 설정 파일 초안 생성
+
+기본 승인 대상:
+
+- 패키지 설치 또는 lock 파일 생성
+- 실제 애플리케이션 코드 scaffold 생성
+- CI/CD 설정 추가
+- 데이터베이스, 인증, 권한, 배포 관련 설정
+- 기존 프로젝트 구조 변경
+
+기본 금지:
+
+- 운영 배포
+- 실제 비밀값 생성 또는 저장
+- 외부 서비스 쓰기 작업
+- 사용자 승인 없는 대규모 재구성
+
+---
+
 ## Rule Priority
 
 기본 우선순위는 다음과 같다.
@@ -892,6 +1005,18 @@ tools: read-only
 .agent-builder/<agent-name>/agent-scenarios.md
 ```
 
+Project Bootstrap Mode에서는 최소한 다음 파일도 생성한다.
+
+```text
+.agent/PROJECT.md
+.agent/ARCHITECTURE.md
+.agent/RULES.md
+.agent/WORKFLOW.md
+.agent-builder/<project-name>/setup-plan.md
+.agent-builder/<project-name>/readiness-report.md
+.agent-builder/<project-name>/agent-scenarios.md
+```
+
 에이전트에 별도 하위 스킬이 필요하지 않다면 그 이유를 명시하고 에이전트 파일과 테스트 시나리오는 반드시 생성한다.
 
 각 파일은 빈 템플릿이 아니라 다음을 반영한 완성된 내용이어야 한다.
@@ -899,6 +1024,7 @@ tools: read-only
 - 현재 프로젝트의 기술 스택
 - 현재 프로젝트의 규약
 - 사용자의 목적
+- Project Bootstrap Mode에서는 프로젝트 목적, 아키텍처, 규칙과 워크플로
 - 허용 도구와 권한
 - 승인 필요 행동
 - 실패 및 부분 성공 처리
@@ -913,6 +1039,7 @@ tools: read-only
 - 에이전트가 하위 스킬을 언제 사용하는지 정의했다.
 - 프로젝트 규약과 권한 정책이 실제 파일에 반영되었다.
 - 검증 시나리오 파일이 `.agent-builder/<agent-name>/agent-scenarios.md`에 생성되었다.
+- Project Bootstrap Mode에서는 `.agent/` 프로젝트 문서, setup plan과 readiness report가 생성되었다.
 - 생성 파일 경로와 사용 방법을 최종 보고에 포함했다.
 
 파일을 생성할 수 없는 환경에서만 각 파일의 완성된 내용을 경로별 코드 블록으로 출력한다.
@@ -1003,5 +1130,6 @@ tools: read-only
 - 대상 플랫폼의 실제 에이전트 파일이 생성되어 있다.
 - 필요한 모든 하위 스킬 파일이 생성되어 있다.
 - 검증 시나리오 파일이 `.agent-builder/<agent-name>/agent-scenarios.md`에 생성되어 있다.
+- Project Bootstrap Mode에서는 `.agent/` 프로젝트 문서와 `.agent-builder/<project-name>/setup-plan.md`, `readiness-report.md`가 생성되어 있다.
 - 파일을 생성할 수 없는 환경에서는 생성 예정 경로별 완성본이 코드 블록으로 제공되어 있다.
 - 가정과 미확정 사항이 표시되어 있다.
