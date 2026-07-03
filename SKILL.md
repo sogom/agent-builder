@@ -889,7 +889,7 @@ tools: read-only
 <platform-agent-file>
 <platform-skill-directory>/<required-skill>/SKILL.md
 <platform-skill-directory>/<required-skill>/references/...
-tests/agent-scenarios.md
+.agent-builder/<agent-name>/agent-scenarios.md
 ```
 
 에이전트에 별도 하위 스킬이 필요하지 않다면 그 이유를 명시하고 에이전트 파일과 테스트 시나리오는 반드시 생성한다.
@@ -912,7 +912,7 @@ tests/agent-scenarios.md
 - 모든 필수 하위 스킬에 완성된 `SKILL.md`가 생성되었다.
 - 에이전트가 하위 스킬을 언제 사용하는지 정의했다.
 - 프로젝트 규약과 권한 정책이 실제 파일에 반영되었다.
-- 검증 시나리오가 생성되었다.
+- 검증 시나리오 파일이 `.agent-builder/<agent-name>/agent-scenarios.md`에 생성되었다.
 - 생성 파일 경로와 사용 방법을 최종 보고에 포함했다.
 
 파일을 생성할 수 없는 환경에서만 각 파일의 완성된 내용을 경로별 코드 블록으로 출력한다.
@@ -1000,5 +1000,8 @@ tests/agent-scenarios.md
 - 도구와 권한이 최소 범위로 정의되어 있다.
 - 사용자 질문과 승인 정책이 정의되어 있다.
 - 실패와 부분 성공 처리 방식이 정의되어 있다.
-- 검증 시나리오가 작성되어 있다.
+- 대상 플랫폼의 실제 에이전트 파일이 생성되어 있다.
+- 필요한 모든 하위 스킬 파일이 생성되어 있다.
+- 검증 시나리오 파일이 `.agent-builder/<agent-name>/agent-scenarios.md`에 생성되어 있다.
+- 파일을 생성할 수 없는 환경에서는 생성 예정 경로별 완성본이 코드 블록으로 제공되어 있다.
 - 가정과 미확정 사항이 표시되어 있다.

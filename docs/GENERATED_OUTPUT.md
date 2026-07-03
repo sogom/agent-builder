@@ -13,8 +13,9 @@ target-project/
 │       └── <generated-skill>/
 │           ├── SKILL.md
 │           └── references/
-└── tests/
-    └── agent-scenarios.md
+└── .agent-builder/
+    └── <agent-name>/
+        └── agent-scenarios.md
 ```
 
 ## Factory Droid 단일 대상
@@ -30,8 +31,9 @@ target-project/
 │       └── <generated-skill>/
 │           ├── SKILL.md
 │           └── references/
-└── tests/
-    └── agent-scenarios.md
+└── .agent-builder/
+    └── <agent-name>/
+        └── agent-scenarios.md
 ```
 
 ## 두 플랫폼 동시 대상
@@ -46,8 +48,9 @@ target-project/
 ├── .factory/
 │   ├── droids/<agent-name>.md
 │   └── skills/<generated-skill>/SKILL.md
-└── tests/
-    └── agent-scenarios.md
+└── .agent-builder/
+    └── <agent-name>/
+        └── agent-scenarios.md
 ```
 
 ## 공통 명세와 플랫폼 어댑터
