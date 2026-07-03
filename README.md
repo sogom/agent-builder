@@ -15,6 +15,7 @@ Build AI-ready projects with reusable Agents and Skills.
 
 - Claude Code project skills and subagents
 - Factory Droid workspace skills and Custom Droids
+- Codex local skills에서 `agent-builder` 실행
 - 두 플랫폼 동시 생성
 - 새 프로젝트를 AI-ready workspace로 초기화하는 Project Bootstrap Mode
 - 기존 프로젝트 분석 기반 AI workspace 생성은 향후 v3 범위
@@ -45,6 +46,24 @@ agent-builder/
 ```
 
 ## 빠른 설치
+
+### Codex 프로젝트에 설치
+
+대상 프로젝트 루트에서 저장소를 다음 위치로 복사하거나 Git submodule로 추가합니다.
+
+```bash
+git submodule add <REPOSITORY_URL> .agents/skills/agent-builder
+```
+
+Codex는 프로젝트 스킬을 `.agents/skills/<skill-name>/SKILL.md`에서 탐색합니다. 설치 후 새 Codex 세션을 시작합니다.
+
+직접 호출:
+
+```text
+$agent-builder 이 프로젝트의 AI 작업 환경을 정리해줘.
+```
+
+자세한 내용: [`docs/CODEX.md`](docs/CODEX.md)
 
 ### Claude Code 프로젝트에 설치
 
